@@ -1,0 +1,104 @@
+{
+                "municipalityName": "Ángel Albino Corzo",
+                "zipcodes": [
+                    {
+                        "zipCode": "30370",
+                        "neighborhoods": [
+                            {
+                                "name": "Ciudad Rural Ángel Albino Corzo"
+                            },
+                            {
+                                "name": "Francisco I Madero"
+                            },
+                            {
+                                "name": "Guadalupe Victoria (Yerbasanta)"
+                            },
+                            {
+                                "name": "Jaltenango de la Paz Centro"
+                            },
+                            {
+                                "name": "Querétaro"
+                            },
+                            {
+                                "name": "San Francisco"
+                            }
+                        ]
+                    },
+                    {
+                        "zipCode": "30375",
+                        "neighborhoods": [
+                            {
+                                "name": "Nueva Palestina"
+                            }
+                        ]
+                    },
+                    {
+                        "zipCode": "30378",
+                        "neighborhoods": [
+                            {
+                                "name": "Montebello Altamira"
+                            },
+                            {
+                                "name": "Libertad El Pajal"
+                            },
+                            {
+                                "name": "Jerusalén"
+                            }
+                        ]
+                    },
+                    {
+                        "zipCode": "30379",
+                        "neighborhoods": [
+                            {
+                                "name": "La Paz"
+                            }
+                        ]
+                    },
+                    {
+                        "zipCode": "30384",
+                        "neighborhoods": [
+                            {
+                                "name": "La Prusia"
+                            },
+                            {
+                                "name": "Liquidámbar"
+                            },
+                            {
+                                "name": "Salvador Urbina"
+                            }
+                        ]
+                    },
+                    {
+                        "zipCode": "30385",
+                        "neighborhoods": [
+                            {
+                                "name": "Nueva Colombia"
+                            },
+                            {
+                                "name": "Santa Rita"
+                            }
+                        ]
+                    },
+                    {
+                        "zipCode": "30388",
+                        "neighborhoods": [
+                            {
+                                "name": "Argentina"
+                            }
+                        ]
+                    },
+                    {
+                        "zipCode": "30389",
+                        "neighborhoods": [
+                            {
+                                "name": "Plan de Ayutla"
+                            },
+                            {
+                                "name": "Nueva Independencia"
+                            }
+                        ]
+                    }
+                ]
+            }
+                    
+        

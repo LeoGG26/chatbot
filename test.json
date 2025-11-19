@@ -1,0 +1,29 @@
+{
+    "name":"Chiapas",
+    "municipalities":[
+        {"name":"Tapachula",
+            "zipcodes":[
+                {
+                "zipCode":"30790",
+                "neighborhoods":[
+                    {"name":"Centro"},
+                    {"name":"Central"}
+                    ]
+                }
+            ]
+    
+        },
+        {"name":"Mapa",
+            "zipcodes":[
+                {
+                "zipCode":"30590",
+                "neighborhoods":[
+                    {"name":"Centro"},
+                    {"name":"Pesa"}
+                    ]
+                }
+            ]
+
+        }
+    ]
+}

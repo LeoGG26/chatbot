@@ -1,0 +1,31 @@
+services:
+  # Nombre del servicio dentro de Docker Compose
+  mysql-db:
+    # Imagen de Docker que se usará
+    image: mysql:8.0
+    
+    # Nombre que tendrá el contenedor
+    container_name: chatbot
+    
+    # Política de reinicio para que siempre se levante
+    restart: always
+    
+    # Variables de entorno para configurar MySQL
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: chatbot_db
+      MYSQL_USER: leo
+      MYSQL_PASSWORD: leoadmin
+      
+    # Mapeo de puertos (puerto_de_tu_maquina:puerto_del_contenedor)
+    ports:
+      - "3306:3306"
+      
+    # Mapeo de volúmenes para persistir los datos
+    # Tu comando original estaba incompleto, lo he corregido a la forma estándar.
+    #volumes:
+    #  - ventanilla-data:/var/lib/mysql
+
+# Declaración del volumen para que Docker lo gestione
+#volumes:
+# ventanilla-data:
