@@ -24,9 +24,15 @@ export class HoursController {
     return this.hoursService.findOne(+id);
   }
 
+  @Get('/findavailable/:day')
+  findAvailableHoursByDay(@Param('day') day: number) {
+    return this.hoursService.findAvailableHoursByDay(day);
+  }
+
+  
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateHoursDto: UpdateHoursDto) {
-    return this.hoursService.update(+id, updateHoursDto);
+  update(@Param('id') id: string, @Body('phoneNumber') phoneNumber: string) {
+    return this.hoursService.reserve(+id, phoneNumber);
   }
 
   @Delete(':id')

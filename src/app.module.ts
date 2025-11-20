@@ -11,9 +11,20 @@ import { AgendaService } from './agenda/services/agenda.service';
 import { agendaEntities } from './agenda/entities/agendaentities.index';
 import { AgendaControllers } from './agenda/controllers/agenda-controllers.index';
 import { User } from './users/entities/user.entity';
+import { RequestDetails } from './requests/entities/request-details.entity';
+import { agendaServices } from './agenda/services/agenda-services.index';
+import { UsersService } from './users/users.service';
+import { RequestsService } from './requests/requests.service';
+import { UsersController } from './users/users.controller';
+import { RequestsController } from './requests/requests.controller';
+import { HoursService } from './agenda/services/hours.service';
+import { Hours } from './agenda/entities/hours.entity';
+import { Day } from './agenda/entities/days.entity';
+import { AgendaController } from './agenda/controllers/agenda.controller';
+import { HoursController } from './agenda/controllers/hours.controller';
 
 @Module({
-  providers: [AgendaService],
+  providers: [AgendaService,HoursService,UsersService,RequestsService],
 
   imports: [ConfigModule.forRoot({ isGlobal: true }),
   TypeOrmModule.forRoot({
@@ -35,18 +46,28 @@ import { User } from './users/entities/user.entity';
         entities: [
           ...agendaEntities,
           Request,
+          RequestDetails,
           User
         ]
     }),
     TypeOrmModule.forFeature([
         Agenda,
-        Request
+        Day,
+        Hours,
+        User,
+        Request,
+        RequestDetails,
       ] , 'chatbotConnection' ),
   Agenda,
   Request
 ],
   controllers: [
     ...AgendaControllers,
+    AgendaController,
+    HoursController,
+    UsersController,
+    RequestsController,
+
   ],
 })
 export class AppModule {}
