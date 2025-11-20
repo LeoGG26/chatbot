@@ -37,8 +37,8 @@ import { HoursController } from './agenda/controllers/hours.controller';
       password:'admin',// process.env.DB_PASS,
       database: 'chatbot_db',//process.env.DB_NAME,
       //autoLoadEntities: true,      // carga automática de entidades
-      synchronize: true,           // ⚠️ solo en desarrollo
-      dropSchema: true,  // 🚨 cuidado: borra y recrea todo el schema
+      //synchronize: true,           // ⚠️ solo en desarrollo
+      //dropSchema: true,  // 🚨 cuidado: borra y recrea todo el schema
       logging: true,
       extra: {
           charset: "utf8_unicode_ci"
