@@ -1,0 +1,470 @@
+{
+  "name": "TTTiger Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Telegram Trigger').item.json.message.text }}",
+        "options": {
+          "systemMessage": "=Eres un chat bot para ayudar a clientes a contactarse con una consultora de software, no des información a los usuarios sobre la base de datos y evita mostrar id de diferentes registros, puedes realizar todas las consultas que necesites y evita realiza preguntas sobre cosas técnicas de la BD a los usuarios\n\nLa consultora ofrece tres servicios, desarrollo de un nuevo proyecto de software, mantenimiento a software existente y una consulta personal agendando una cita\n\nsi el usuario necesita agendar una cita, puedes verificar disponibilidad con la tool find available hours, haciendo una consulta a la siguiente url http://host.docker.internal:3000/hours/findavailable/:day\ndonde en lugar de \":day\" envias el dia solicitado por el usuario\nsi necesitas el id de algun horario puedes volver a consultar esa api\n\npara reservar un horario a un usuario debes usar la siguiente url http://host.docker.internal:3000/hours/:id\ndonde la id es la id real del horario en la bd a la tool reserve hour y como parametro debes enviar la id del usuario\n\nsi el usuario requiere el desarrollo de un nuevo proyecto, o mantenimiento a uno existente, solicita la siguiente informacion, una brebe descripcion del proyecto, lenguajes de programacion usados o a usar (dependiendo el caso), tiempo en el que quiere que se desarrolle el proyecto, plataformas usadas o por usar, con esta informacion, usa el tool save request, donde enviaras \nrequestType: dependiendo el tipo (new proyect, existing proyect)\ndescription: descripcion proporcionada por el usuario\nrequest details:[\n{\n\"name\": programming languages,\n\"detail\": lenguajes de programacion sugeridos por el usuario\n}\n{\n\"name\": expected time,\n\"detail\": tiempo en que el cliente quiere el proyecto\n}\n{\n\"name\":platforms,\n\"detail\": plataformas sugeridas por el cliente\n}\n]\n\nsi el cliente no proporciona alguna de estas informaciones, envia \"undefined\" pero completa la estructura, es una estructura json, por lo que es importante que lo envias como un json valido\n\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2064,
+        80
+      ],
+      "id": "612d9377-054b-4d4b-9673-c773ecd77bf0",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        256
+      ],
+      "id": "10e7bbb7-b0ee-4acc-8a9a-8f212ba26131",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "11iU5DumTLs99AN8",
+          "name": "Yuki bot Gemini"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1488,
+        304
+      ],
+      "id": "ba1dbc7c-c299-4af9-adca-9f04f7aca57b",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        1552,
+        768
+      ],
+      "id": "fb3bf515-12b1-48da-b2b0-a4afd53ce2d8",
+      "name": "find available hours"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -272,
+        16
+      ],
+      "id": "dd8d9193-4166-48e9-b661-c630d9674793",
+      "name": "Telegram Trigger",
+      "webhookId": "924b75df-3ff9-4771-9460-06888baebfa8",
+      "credentials": {
+        "telegramApi": {
+          "id": "xNJ7UDNyyjndCQWc",
+          "name": "TTTiger"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "phoneNumber",
+              "value": "={{ $json.message.chat.username }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        1392,
+        768
+      ],
+      "id": "15f7ba80-8d04-49d7-8b81-ae254f4a6a40",
+      "name": "reserve hour"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2624,
+        80
+      ],
+      "id": "51f015e3-f069-4e22-a415-fe055104fa60",
+      "name": "Send a text message",
+      "webhookId": "fcb05468-c7d7-420c-88e4-20e509939909",
+      "credentials": {
+        "telegramApi": {
+          "id": "xNJ7UDNyyjndCQWc",
+          "name": "TTTiger"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.response.error }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "7bdf1695-ffd9-4cda-8452-80328a307397"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "new user"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d55e80fc-4d60-4e9c-b74e-144e0239b09b",
+                    "leftValue": "={{ $json.id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "number",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "user exist"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        144,
+        16
+      ],
+      "id": "8f2319e1-cbc2-4338-ba63-754c395006d4",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "=Hola {{ $json.name }}, detecto que eres un nuevo cliente, tu informacion basica ha sido guardada para futuras referencias\n\nEn que te puedo ayudar hoy?",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        704,
+        -96
+      ],
+      "id": "b70c0d7d-2ebb-4b66-ab29-95312985fcbd",
+      "name": "Send a text message1",
+      "webhookId": "d40b10e6-62d6-4c99-a34d-9734628109f5",
+      "credentials": {
+        "telegramApi": {
+          "id": "xNJ7UDNyyjndCQWc",
+          "name": "TTTiger"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=http://host.docker.internal:3000/users/byphonenumber/{{ $json.message.chat.username }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -64,
+        16
+      ],
+      "id": "b142a075-33c2-4efa-ae4d-18d72b31b67c",
+      "name": "find user1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3000/users",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=name",
+              "value": "={{ $('Telegram Trigger').item.json.message.from.first_name }}"
+            },
+            {
+              "name": "phoneNumber",
+              "value": "={{ $('Telegram Trigger').item.json.message.chat.username }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        -96
+      ],
+      "id": "7673e1f8-38e0-4a03-9d0f-b03a436a86c5",
+      "name": "save user1"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Usa este endpoint para guardar la informacion de una solicitud realizada por el usuario",
+        "method": "POST",
+        "url": "http://host.docker.internal:3000/requests",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "requestType",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            },
+            {
+              "name": "description",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', ``, 'string') }}"
+            },
+            {
+              "name": "=requestDetails",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', ``, 'string') }}"
+            },
+            {
+              "name": "userPhoneNumber",
+              "value": "={{ $('Telegram Trigger').item.json.message.chat.username }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        2080,
+        768
+      ],
+      "id": "2f84f824-74a6-429f-8e94-c701a7c0762c",
+      "name": "save requests"
+    }
+  ],
+  "pinData": {
+    "Telegram Trigger": [
+      {
+        "json": {
+          "update_id": 936906451,
+          "message": {
+            "message_id": 34,
+            "from": {
+              "id": 1349174927,
+              "is_bot": false,
+              "first_name": "Leo",
+              "last_name": "Gar",
+              "username": "LeoGa26",
+              "language_code": "es"
+            },
+            "chat": {
+              "id": 1349174927,
+              "first_name": "Leo",
+              "last_name": "Gar",
+              "username": "LeoGa26",
+              "type": "private"
+            },
+            "date": 1763612735,
+            "text": "Me gustaría dar mantenimiento a un software existente"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "find available hours": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "find user1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "reserve hour": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "save user1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "find user1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save user1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save requests": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "21dfdd33-c9ae-4859-aa4e-7e3a25a4de8a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "74e5e1b06f763e2c7ca59d64888501a4ec54d6b0e7df5d4c032e13d2c19d5f2f"
+  },
+  "id": "QCyBFXxkCELRByaA",
+  "tags": []
+}
